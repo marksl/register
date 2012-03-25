@@ -7,15 +7,11 @@ namespace Register.Tests
     [TestFixture]
     public class DiscountsTests
     {
-        #region Setup/Teardown
-
         [SetUp]
         public void CreateDiscounts()
         {
             _discounts = new Discounts();
         }
-
-        #endregion
 
         private Discounts _discounts;
 
@@ -23,12 +19,12 @@ namespace Register.Tests
         {
             get
             {
-                var itemsWithNoDiscounts = new List<Item> {new Item(ItemId.BoxOfCherrios, 0.5M)};
+                var items = new List<Item> {new Item(ItemId.BoxOfCherrios, 0.5M)};
                 for (int i = 0; i < 5; i++)
                 {
-                    itemsWithNoDiscounts.Add(new Item(ItemId.Apples, 1.0M));
+                    items.Add(new Item(ItemId.Apples, 1.0M));
                 }
-                return itemsWithNoDiscounts;
+                return items;
             }
         }
 
@@ -36,12 +32,12 @@ namespace Register.Tests
         {
             get
             {
-                var itemsWithNoDiscounts = new List<Item> {new Item(ItemId.BoxOfCherrios, 0.5M)};
+                var items = new List<Item> {new Item(ItemId.BoxOfCherrios, 0.5M)};
                 for (int i = 0; i < 10; i++)
                 {
-                    itemsWithNoDiscounts.Add(new Item(ItemId.Apples, 1.0M));
+                    items.Add(new Item(ItemId.Apples, 1.0M));
                 }
-                return itemsWithNoDiscounts;
+                return items;
             }
         }
 
