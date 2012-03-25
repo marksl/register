@@ -8,7 +8,12 @@ namespace Register
         {
             if (id == ItemId.Invalid)
             {
-                throw new InvalidOperationException("ItemId is invalid.");
+                throw new ArgumentOutOfRangeException("id", "ItemId is invalid.");
+            }
+
+            if (price <= 0.0M)
+            {
+                throw new ArgumentOutOfRangeException("price", "price must be greater than $0.00.");
             }
 
             Id = id;

@@ -71,25 +71,25 @@ namespace Register.Tests
         }
 
         [Test]
+        public void GetDiscount_CouponAddedAndItemsAreUnderThreshold_CouponAddedToDiscountTotal()
+        {
+            _discounts.AddCoupon(new Coupon(5.0M, 50.0M));
+
+            decimal discount = _discounts.GetDiscount(new[] {new Item(ItemId.BoxOfCherrios, 40.0M)});
+
+            Assert.AreEqual(0.0M, discount);
+        }
+
+        [Test]
         public void GetDiscount_CouponAddedAndItemsExceedThreshold_CouponAddedToDiscountTotal()
         {
             const decimal moneyOff = 5.0M;
 
             _discounts.AddCoupon(new Coupon(moneyOff, 50.0M));
 
-            decimal discount = _discounts.GetDiscount(new Item[] {new Item(ItemId.BoxOfCherrios, 51.0M)});
+            decimal discount = _discounts.GetDiscount(new[] {new Item(ItemId.BoxOfCherrios, 51.0M)});
 
             Assert.AreEqual(moneyOff, discount);
-        }
-
-        [Test]
-        public void GetDiscount_CouponAddedAndItemsAreUnderThreshold_CouponAddedToDiscountTotal()
-        {
-            _discounts.AddCoupon(new Coupon(5.0M, 50.0M));
-
-            decimal discount = _discounts.GetDiscount(new Item[] { new Item(ItemId.BoxOfCherrios, 40.0M) });
-
-            Assert.AreEqual(0.0M, discount);
         }
 
         [Test]

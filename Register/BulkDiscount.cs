@@ -5,8 +5,8 @@ namespace Register
     public class BulkDiscount
     {
         private readonly ItemId _itemId;
-        private readonly int _numberRequiredToBuy;
         private readonly int _numberReceivedFree;
+        private readonly int _numberRequiredToBuy;
 
         private int numberBought;
         private int numberFree;
@@ -15,12 +15,12 @@ namespace Register
         {
             if (buyX < 2)
             {
-                throw new InvalidOperationException("Must specify atleast 2 required.");
+                throw new ArgumentOutOfRangeException("buyX", "Must specify atleast 2 required.");
             }
 
             if (getYFree < 1)
             {
-                throw new InvalidOperationException("Must specify atleast 1 received free.");
+                throw new ArgumentOutOfRangeException("getYFree", "Must specify atleast 1 received free.");
             }
 
             _itemId = itemId;

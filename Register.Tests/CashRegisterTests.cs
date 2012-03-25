@@ -7,7 +7,7 @@ namespace Register.Tests
     [TestFixture]
     public class CashRegisterTests
     {
-        private CashRegister _registerAllItemsOneDollar;
+        #region Setup/Teardown
 
         [SetUp]
         public void CreateCashRegister()
@@ -15,25 +15,47 @@ namespace Register.Tests
             _registerAllItemsOneDollar = new CashRegister(new AllItemsAreOneDollar());
         }
 
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void Ctor_NullItems_ThrowsException()
+        #endregion
+
+        private CashRegister _registerAllItemsOneDollar;
+
+        private static IDiscounts WithNoDiscount
         {
-            new CashRegister(null);
+            get { return new NoDiscount(); }
         }
 
-        [Test]
-        public void Ctor_IntegationTestWithItems_Succeeds()
+        private class NoDiscount : IDiscounts
         {
-            new CashRegister(new ItemPrices());
+            #region IDiscounts Members
+
+            public decimal GetDiscount(IEnumerable<Item> items)
+            {
+                return 0.0M;
+            }
+
+            #endregion
         }
 
-        [Test]
-        public void AddItem_ValidItem_ReturnsItem()
+        private class AllItemsAreOneDollar : IItemPrices
         {
-            Item item = _registerAllItemsOneDollar.AddItem(ItemId.BoxOfCherrios);
+            public static decimal OneDollar
+            {
+                get { return 1.00M; }
+            }
 
-            Assert.IsNotNull(item);
+            #region IItemPrices Members
+
+            public decimal GetPrice(ItemId id)
+            {
+                return OneDollar;
+            }
+
+            public decimal GetWeighedPrice(ItemId id)
+            {
+                return OneDollar;
+            }
+
+            #endregion
         }
 
         [Test]
@@ -46,17 +68,59 @@ namespace Register.Tests
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void RemoveItem_NullItem_ThrowsException()
+        public void AddItem_ValidItem_ReturnsItem()
         {
-            _registerAllItemsOneDollar.RemoveItem(null);
+            Item item = _registerAllItemsOneDollar.AddItem(ItemId.BoxOfCherrios);
+
+            Assert.IsNotNull(item);
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
+        public void CalculateTotalBill_NoItems_ReturnsZero()
+        {
+            decimal total = _registerAllItemsOneDollar.CalculateTotalBill(WithNoDiscount);
+
+            Assert.AreEqual(0.00M, total);
+        }
+
+        [Test]
+        public void CalculateTotalBill_TwoItemsNoDiscount_ReturnsTwoItemCost()
+        {
+            decimal twoItemCost = AllItemsAreOneDollar.OneDollar*2;
+
+            _registerAllItemsOneDollar.AddItem(ItemId.KraftDinner);
+            _registerAllItemsOneDollar.AddItem(ItemId.BoxOfCherrios);
+
+            decimal total = _registerAllItemsOneDollar.CalculateTotalBill(WithNoDiscount);
+
+            Assert.AreEqual(twoItemCost, total);
+        }
+
+        [Test]
+        public void Ctor_IntegationTestWithItems_Succeeds()
+        {
+            new CashRegister(new ItemPrices());
+        }
+
+        [Test]
+        [ExpectedException(typeof (ArgumentNullException))]
+        public void Ctor_NullItems_ThrowsException()
+        {
+            new CashRegister(null);
+        }
+
+        [Test]
+        [ExpectedException(typeof (InvalidOperationException))]
         public void RemoveItem_ItemDoesntExist_ThrowsException()
         {
             _registerAllItemsOneDollar.RemoveItem(new Item(ItemId.Apples, 0.50M));
+        }
+
+        [Test]
+        [ExpectedException(typeof (ArgumentNullException))]
+        public void RemoveItem_NullItem_ThrowsException()
+        {
+            _registerAllItemsOneDollar.RemoveItem(null);
         }
 
         [Test]
@@ -67,58 +131,6 @@ namespace Register.Tests
             bool removed = _registerAllItemsOneDollar.RemoveItem(addedItem);
 
             Assert.IsTrue(removed);
-        }
-
-        [Test]
-        public void CalculateTotalBill_NoItems_ReturnsZero()
-        {
-            decimal total = _registerAllItemsOneDollar.CalculateTotalBill(WithNoDiscount);
-            
-            Assert.AreEqual(0.00M, total);
-        }
-
-        [Test]
-        public void CalculateTotalBill_TwoItemsNoDiscount_ReturnsTwoItemCost()
-        {
-            decimal twoItemCost = AllItemsAreOneDollar.OneDollar * 2;
-
-            _registerAllItemsOneDollar.AddItem(ItemId.KraftDinner);
-            _registerAllItemsOneDollar.AddItem(ItemId.BoxOfCherrios);
-
-            decimal total = _registerAllItemsOneDollar.CalculateTotalBill(WithNoDiscount);
-
-            Assert.AreEqual(twoItemCost, total);
-        }
-
-        private static IDiscounts WithNoDiscount
-        {
-            get { return new NoDiscount(); }
-        }
-
-        private class NoDiscount : IDiscounts
-        {
-            public decimal GetDiscount(IEnumerable<Item> items)
-            {
-                return 0.0M;
-            }
-        }
-
-        private class AllItemsAreOneDollar : IItemPrices
-        {
-            public decimal GetPrice(ItemId id)
-            {
-                return OneDollar;
-            }
-
-            public decimal GetWeighedPrice(ItemId id)
-            {
-                return OneDollar;
-            }
-
-            public static decimal OneDollar
-            {
-                get { return 1.00M; }
-            }
         }
     }
 }
