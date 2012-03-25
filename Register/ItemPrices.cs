@@ -11,21 +11,21 @@ namespace Register
 
         #region IItemPrices Members
 
-        public decimal GetPrice(ItemId itemId)
+        public decimal GetPrice(ItemId id)
         {
-            return GetItemPrice(_items, itemId);
+            return GetItemPrice(_items, id);
         }
 
-        public decimal GetWeighedPrice(ItemId itemId)
+        public decimal GetWeighedPrice(ItemId id)
         {
-            return GetItemPrice(_weighedItems, itemId);
+            return GetItemPrice(_weighedItems, id);
         }
 
         #endregion
 
-        private static decimal GetItemPrice(IEnumerable<ItemPrice> items, ItemId itemId)
+        private static decimal GetItemPrice(IEnumerable<ItemPrice> items, ItemId id)
         {
-            ItemPrice itemPrice = items.SingleOrDefault(x => x.Id == itemId);
+            ItemPrice itemPrice = items.SingleOrDefault(x => x.Id == id);
 
             if (itemPrice == null)
             {
@@ -35,14 +35,14 @@ namespace Register
             return itemPrice.Price;
         }
 
-        public void AddItem(ItemId boxOfCherrios, decimal price)
+        public void AddItem(ItemId id, decimal price)
         {
-            _items.Add(new ItemPrice(boxOfCherrios, price));
+            _items.Add(new ItemPrice(id, price));
         }
 
-        public void AddWeighedItem(ItemId boxOfCherrios, decimal price)
+        public void AddWeighedItem(ItemId id, decimal price)
         {
-            _weighedItems.Add(new ItemPrice(boxOfCherrios, price));
+            _weighedItems.Add(new ItemPrice(id, price));
         }
     }
 }

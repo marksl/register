@@ -2,7 +2,7 @@ namespace Register
 {
     public interface IItemPrices
     {
-        decimal GetPrice(ItemId itemId);
-        decimal GetWeighedPrice(ItemId itemId);
+        decimal GetPrice(ItemId id);
+        decimal GetWeighedPrice(ItemId id);
     }
 }

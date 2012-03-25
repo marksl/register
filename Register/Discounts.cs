@@ -11,30 +11,30 @@ namespace Register
 
         #region IDiscounts Members
 
-        public decimal GetTotalAfterDiscounts(IEnumerable<Item> items, decimal total)
+        public decimal GetDiscount(IEnumerable<Item> items)
         {
-            decimal freeItemTotal = GetFreeItemTotal(items);
+            List<Item> allItems = items.ToList();
 
-            total = total - freeItemTotal;
+            decimal freeItemTotal = GetFreeItemTotal(allItems);
+
+            decimal discountTotal = freeItemTotal;
 
             if (_coupon != null)
             {
-                total = _coupon.GetTotal(total);
+                discountTotal += _coupon.GetDiscount(allItems);
             }
 
-            return total;
+            return discountTotal;
         }
 
         #endregion
 
-        public bool Add(BulkDiscount bulkDiscount)
+        public void Add(BulkDiscount bulkDiscount)
         {
             _bulkDiscounts.Add(bulkDiscount);
-
-            return true;
         }
 
-        public bool AddCoupon(Coupon coupon)
+        public void AddCoupon(Coupon coupon)
         {
             if (coupon == null) throw new ArgumentNullException("coupon");
 
@@ -45,18 +45,6 @@ namespace Register
             }
 
             _coupon = coupon;
-
-            return true;
-        }
-
-        public bool RemoveCoupon()
-        {
-            if (_coupon == null)
-                throw new InvalidOperationException("Failed to remove coupon. No coupon exists.");
-
-            _coupon = null;
-
-            return true;
         }
 
         private decimal GetFreeItemTotal(IEnumerable<Item> items)
@@ -70,14 +58,14 @@ namespace Register
 
         private IEnumerable<Item> GetFreeItems(IEnumerable<Item> items)
         {
-            Dictionary<ItemId, BulkDiscount> discounts = CloneDiscountsToSupportMultieThreadedCashRegister();
+            Dictionary<ItemId, BulkDiscount> discounts = CloneDiscountsToSupportMultiThreadedCashRegister();
 
             IEnumerable<Item> freeItems = items.Where(item => IsItemFree(item, discounts));
 
             return freeItems;
         }
 
-        private Dictionary<ItemId, BulkDiscount> CloneDiscountsToSupportMultieThreadedCashRegister()
+        private Dictionary<ItemId, BulkDiscount> CloneDiscountsToSupportMultiThreadedCashRegister()
         {
             return _bulkDiscounts.Select(x => x.Clone()).ToDictionary(discount => discount.ItemId);
         }

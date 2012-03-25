@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Register
 {
@@ -23,9 +25,12 @@ namespace Register
             _threshold = threshold;
         }
 
-        internal decimal GetTotal(decimal total)
+        internal decimal GetDiscount(List<Item> items)
         {
-            return total > _threshold ? total - _moneyOff : total;
+            // GRR Calculating the sum in two places...
+            decimal total = items.Sum(item => item.GetPrice());
+
+            return total > _threshold ? _moneyOff : 0.00M;
         }
     }
 }

@@ -23,6 +23,12 @@ namespace Register.Tests
         }
 
         [Test]
+        public void Ctor_IntegationTestWithItems_Succeeds()
+        {
+            new CashRegister(new ItemPrices());
+        }
+
+        [Test]
         public void AddItem_ValidItem_ReturnsItem()
         {
             Item item = _registerAllItemsOneDollar.AddItem(ItemId.BoxOfCherrios);
@@ -74,7 +80,7 @@ namespace Register.Tests
         [Test]
         public void CalculateTotalBill_TwoItemsNoDiscount_ReturnsTwoItemCost()
         {
-            const decimal twoItemCost = 2.00M;
+            decimal twoItemCost = AllItemsAreOneDollar.OneDollar * 2;
 
             _registerAllItemsOneDollar.AddItem(ItemId.KraftDinner);
             _registerAllItemsOneDollar.AddItem(ItemId.BoxOfCherrios);
@@ -91,25 +97,25 @@ namespace Register.Tests
 
         private class NoDiscount : IDiscounts
         {
-            public decimal GetTotalAfterDiscounts(IEnumerable<Item> items, decimal total)
+            public decimal GetDiscount(IEnumerable<Item> items)
             {
-                return total;
+                return 0.0M;
             }
         }
 
         private class AllItemsAreOneDollar : IItemPrices
         {
-            public decimal GetPrice(ItemId itemId)
+            public decimal GetPrice(ItemId id)
             {
                 return OneDollar;
             }
 
-            public decimal GetWeighedPrice(ItemId itemId)
+            public decimal GetWeighedPrice(ItemId id)
             {
                 return OneDollar;
             }
 
-            private static decimal OneDollar
+            public static decimal OneDollar
             {
                 get { return 1.00M; }
             }

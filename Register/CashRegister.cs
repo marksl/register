@@ -60,9 +60,9 @@ namespace Register
         {
             decimal total = _items.Sum(item => item.GetPrice());
 
-            decimal totalAfterDiscounts = discounts.GetTotalAfterDiscounts(_items, total);
+            decimal discount = discounts.GetDiscount(_items);
 
-            return totalAfterDiscounts;
+            return total - discount;
         }
     }
 }

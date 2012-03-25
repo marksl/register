@@ -4,6 +4,6 @@ namespace Register
 {
     public interface IDiscounts
     {
-        decimal GetTotalAfterDiscounts(IEnumerable<Item> items, decimal total);
+        decimal GetDiscount(IEnumerable<Item> items);
     }
 }

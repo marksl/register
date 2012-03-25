@@ -11,21 +11,21 @@ namespace Register
         private int numberBought;
         private int numberFree;
 
-        public BulkDiscount(ItemId itemId, int numberRequiredToBuy, int numberReceivedFree)
+        public BulkDiscount(ItemId itemId, int buyX, int getYFree)
         {
-            if (numberRequiredToBuy <2)
+            if (buyX < 2)
             {
                 throw new InvalidOperationException("Must specify atleast 2 required.");
             }
 
-            if (numberReceivedFree < 1)
+            if (getYFree < 1)
             {
                 throw new InvalidOperationException("Must specify atleast 1 received free.");
             }
 
             _itemId = itemId;
-            _numberRequiredToBuy = numberRequiredToBuy;
-            _numberReceivedFree = numberReceivedFree;
+            _numberRequiredToBuy = buyX - getYFree;
+            _numberReceivedFree = getYFree;
         }
 
         internal ItemId ItemId
@@ -40,12 +40,6 @@ namespace Register
 
         internal bool IsNextItemFree(Item item)
         {
-            if (item.Id != _itemId)
-            {
-                throw new InvalidOperationException(string.Format("This discount only applies to {0} and not {1}",
-                                                                  _itemId, item.Id));
-            }
-
             if (numberFree > 0)
             {
                 numberFree--;
