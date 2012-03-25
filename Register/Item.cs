@@ -1,30 +1,26 @@
-﻿namespace Register
+﻿using System;
+
+namespace Register
 {
     public class Item
     {
-        public ItemId Id { get; private set; }
-        public PricingStrategy PricingStrategy { get; private set; }
-
-        public Item(ItemId id, PricingStrategy pricingStrategy)
+        public Item(ItemId id, decimal price)
         {
+            if (id == ItemId.Invalid)
+            {
+                throw new InvalidOperationException("ItemId is invalid.");
+            }
+
             Id = id;
-            PricingStrategy = pricingStrategy;
+            Price = price;
         }
 
-        public decimal GetPrice()
+        public ItemId Id { get; private set; }
+        protected decimal Price { get; set; }
+
+        public virtual decimal GetPrice()
         {
-            return PricingStrategy.GetPrice();
+            return Price;
         }
-    }
-
-    // Perhaps this does make more sense....
-
-    public class WeighedItem : Item
-    {
-        public WeighedItem(ItemId id, PricingStrategy pricingStrategy) : base(id, pricingStrategy)
-        {
-        }
-
-        public decimal Weight { get; set; }
     }
 }

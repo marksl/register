@@ -5,6 +5,8 @@ namespace Register
         Invalid = 0,
 
         BoxOfCherrios,
-        Apples
+        KraftDinner,
+        Apples,
+        Oranges,
     }
 }

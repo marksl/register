@@ -41,15 +41,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BulkDiscount.cs" />
+    <Compile Include="Discounts.cs" />
     <Compile Include="CashRegister.cs" />
     <Compile Include="Coupon.cs" />
+    <Compile Include="IDiscounts.cs" />
+    <Compile Include="IItemPrices.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="ItemId.cs" />
-    <Compile Include="ItemPriceRepository.cs" />
-    <Compile Include="PricePerItem.cs" />
-    <Compile Include="PricePerWeight.cs" />
-    <Compile Include="PricingStrategy.cs" />
+    <Compile Include="ItemPrice.cs" />
+    <Compile Include="ItemPrices.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WeighedItem.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

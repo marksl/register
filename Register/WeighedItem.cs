@@ -1,8 +1,9 @@
 namespace Register
 {
-    public class PricePerWeight : PricingStrategy
+    public class WeighedItem : Item
     {
-        public PricePerWeight(decimal weight)
+        public WeighedItem(ItemId id, decimal price, decimal weight)
+            : base(id, price)
         {
             Weight = weight;
         }
@@ -11,7 +12,7 @@ namespace Register
 
         public override decimal GetPrice()
         {
-            throw new System.NotImplementedException();
+            return Weight*Price;
         }
     }
 }
